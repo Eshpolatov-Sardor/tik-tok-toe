@@ -1,16 +1,20 @@
 type Sardor = "X" | "O" | null;
 type Oyin = Sardor[];
+
 interface Gamerstart {
   sardor: Oyin;
   curSardor: Sardor;
   isGame: boolean;
 };
-const initializeBoard = (): Oyin => Array(9).fill(null) as Oyin;
+
+function initializeBoard(): Oyin { Array(9).fill(null) as Oyin}
+
 const createGameState = (): Gamerstart => ({
   sardor: initializeBoard(),
   curSardor: "X",
   isGame: false,
 });
+
 const renderBoard = (gameState: Gamerstart,boardElement: HTMLElement
 ): void => {
   const cells = boardElement.querySelectorAll(".cell");
@@ -18,6 +22,7 @@ const renderBoard = (gameState: Gamerstart,boardElement: HTMLElement
     (cell as HTMLElement).textContent = gameState.sardor[index];
   });
 };
+
 const checkWin = (sardor: Oyin): number[] | null => {
   const winningCombinations = [[0, 1, 2],[3, 4, 5],[6, 7, 8], [0, 3, 6],[1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6], ];
   for (const combination of winningCombinations) {
@@ -28,6 +33,7 @@ const checkWin = (sardor: Oyin): number[] | null => {
   }
   return null;
 };
+
 const handleCellClick = (index: number,gameState: Gamerstart,boardElement: HTMLElement,winningMessageElement: HTMLElement): void => {
   if (gameState.sardor[index] || gameState.isGame) return;
 
@@ -42,12 +48,14 @@ const handleCellClick = (index: number,gameState: Gamerstart,boardElement: HTMLE
       boardElement,
       winningMessageElement
     );
-  } else {
+  } 
+  else {
     gameState.curSardor = gameState.curSardor === "X" ? "O" : "X";
   }
 
   renderBoard(gameState, boardElement);
 };
+
 const displayWinner = (winner: Sardor,winningCells: number[],boardElement: HTMLElement,winningMessageElement: HTMLElement): void => {
   winningMessageElement.textContent = `${winner} yutdi!`;
   winningMessageElement.className = "text-2xl text-green-500 mt-4";
@@ -60,6 +68,7 @@ const displayWinner = (winner: Sardor,winningCells: number[],boardElement: HTMLE
     }
   });
 };
+
 const resetGame = (gameState: Gamerstart,boardElement: HTMLElement,winningMessageElement: HTMLElement): void => {
   gameState.sardor = initializeBoard();
   gameState.curSardor = "X";
@@ -71,12 +80,14 @@ const resetGame = (gameState: Gamerstart,boardElement: HTMLElement,winningMessag
     cell.classList.remove("winning-cell");
   });
 };
+
 document.addEventListener("DOMContentLoaded", () => {
   const gameState = createGameState();
-  const boardElement = document.querySelector("#board")!;
-  const resetButton = document.getElementById("resetButton")!;
+  const boardElement = document.querySelector("#board") as HTMLDivElement;
+  const resetButton = document.getElementById("resetButton") as HTMLDivElement;
   const winningMessageElement = document.createElement("div");
   winningMessageElement.className = "text-center text-red-500";
+
   boardElement.addEventListener("click", (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const index = target.getAttribute("data-index");
